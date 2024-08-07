@@ -1,5 +1,5 @@
 [package]
-name = "your_sdk_name"
+name = "TBV-Rust-SDK"
 version = "0.1.0"
 authors = ["Your Name <your.email@example.com>"]
 description = "Rust SDK for the TBV appilcation and CLI"
