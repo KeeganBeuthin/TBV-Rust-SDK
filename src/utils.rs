@@ -1,10 +1,13 @@
-use crate::ffi::{alloc, log_message};
+use wasm_bindgen::prelude::*;
 
 pub fn log(message: &str) {
-    let bytes = message.as_bytes();
-    let ptr = alloc(bytes.len());
-    unsafe {
-        std::ptr::copy_nonoverlapping(bytes.as_ptr(), ptr, bytes.len());
-        log_message(ptr as *const u8, bytes.len() as i32);
+    web_sys::console::log_1(&message.into());
+}
+
+pub fn read_html_code(html_code: &str) -> Result<String, String> {
+    if html_code.is_empty() {
+        return Err("Error: empty HTML code provided".to_string());
     }
+    // Here you can add any processing logic if needed
+    Ok(html_code.to_string())
 }

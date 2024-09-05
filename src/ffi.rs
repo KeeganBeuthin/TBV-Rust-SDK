@@ -1,3 +1,7 @@
+
+use std::ffi::CString;
+use std::os::raw::c_char;
+
 #[no_mangle]
 pub extern "C" fn alloc(len: usize) -> *mut u8 {
     let mut buf = Vec::with_capacity(len);
@@ -13,14 +17,33 @@ pub extern "C" fn dealloc(ptr: *mut u8, len: usize) {
     }
 }
 
-pub(crate) fn string_to_ptr(s: &str) -> *const u8 {
-    let mut bytes = s.as_bytes().to_vec();
-    bytes.push(0); // Null terminator
-    let ptr = alloc(bytes.len());
+
+
+#[no_mangle]
+pub extern "C" fn alloc(len: usize) -> *mut u8 {
+    let mut buf = Vec::with_capacity(len);
+    let ptr = buf.as_mut_ptr();
+    std::mem::forget(buf);
+    ptr
+}
+
+#[no_mangle]
+pub extern "C" fn dealloc(ptr: *mut u8, len: usize) {
     unsafe {
-        std::ptr::copy_nonoverlapping(bytes.as_ptr(), ptr, bytes.len());
+        let _ = Vec::from_raw_parts(ptr, 0, len);
     }
-    ptr as *const u8
+}
+
+pub fn string_to_ptr(s: &str) -> *const c_char {
+    CString::new(s).unwrap().into_raw()
+}
+
+pub fn free_string(ptr: *mut c_char) {
+    unsafe {
+        if !ptr.is_null() {
+            let _ = CString::from_raw(ptr);
+        }
+    }
 }
 
 extern "C" {
