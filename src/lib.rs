@@ -1,3 +1,6 @@
+extern crate serde;
+extern crate serde_json;
+
 pub mod ffi;
 pub mod transactions;
 pub mod query;

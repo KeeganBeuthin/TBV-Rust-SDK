@@ -1,10 +1,12 @@
+
 [package]
-name = "TBV-Rust-SDK"
+name = "tbv_rust_sdk"
 version = "0.1.1"
 authors = ["Your Name <your.email@example.com>"]
-description = "Rust SDK for the TBV appilcation and CLI"
+description = "Rust SDK for the TBV application and CLI"
 license = "MIT"
 repository = "https://github.com/KeeganBeuthin/TBV-Rust-SDK.git"
+edition = "2021"
 
 [dependencies]
 serde = { version = "1.0", features = ["derive"] }

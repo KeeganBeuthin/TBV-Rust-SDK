@@ -3,7 +3,7 @@ use crate::utils::log;
 
 #[no_mangle]
 pub extern "C" fn execute_credit_leg(amount_ptr: *const u8, amount_len: usize, account_ptr: *const u8, account_len: usize) -> *const u8 {
-    let amount = unsafe { std::str::from_utf8_unchecked(std::slice::from_raw_parts(amount_ptr, amount_len)) };
+    let _amount = unsafe { std::str::from_utf8_unchecked(std::slice::from_raw_parts(amount_ptr, amount_len)) };
     let account = unsafe { std::str::from_utf8_unchecked(std::slice::from_raw_parts(account_ptr, account_len)) };
     
     let query = crate::query::generate_balance_query(account);
