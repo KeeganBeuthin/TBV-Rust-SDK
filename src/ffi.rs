@@ -19,13 +19,6 @@ pub extern "C" fn alloc(len: usize) -> *mut u8 {
     ptr
 }
 
-#[no_mangle]
-pub extern "C" fn dealloc(ptr: *mut u8, len: usize) {
-    unsafe {
-        let _ = Vec::from_raw_parts(ptr, 0, len);
-    }
-}
-
 pub fn string_to_ptr(s: &str) -> *const c_char {
     CString::new(s).unwrap().into_raw()
 }
