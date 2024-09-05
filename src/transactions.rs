@@ -8,7 +8,7 @@ pub extern "C" fn execute_credit_leg(amount_ptr: *const u8, amount_len: usize, a
     
     let query = crate::query::generate_balance_query(account);
     
-    string_to_ptr(&query)
+    string_to_ptr(&query) as *const u8
 }
 
 #[no_mangle]
@@ -23,7 +23,7 @@ pub extern "C" fn process_credit_result(result_ptr: *const u8, result_len: usize
         Err(e) => {
             let error_msg = format!("Failed to parse result JSON: {}", e);
             log(&error_msg);
-            return string_to_ptr(&error_msg);
+            return string_to_ptr(&error_msg) as *const u8;
         }
     };
 
@@ -37,7 +37,7 @@ pub extern "C" fn process_credit_result(result_ptr: *const u8, result_len: usize
         None => {
             let error_msg = "Failed to extract balance from result";
             log(error_msg);
-            return string_to_ptr(error_msg);
+            return string_to_ptr(error_msg) as *const u8;
         }
     };
 
@@ -48,7 +48,7 @@ pub extern "C" fn process_credit_result(result_ptr: *const u8, result_len: usize
         Err(e) => {
             let error_msg = format!("Failed to parse amount as float: {}", e);
             log(&error_msg);
-            return string_to_ptr(&error_msg);
+            return string_to_ptr(&error_msg) as *const u8;
         }
     };
 
@@ -57,7 +57,7 @@ pub extern "C" fn process_credit_result(result_ptr: *const u8, result_len: usize
     let response = format!("Current balance: {}. After credit of {}, new balance: {}", balance, amount_float, new_balance);
     log(&response);
     
-    string_to_ptr(&response)
+    string_to_ptr(&response) as *const u8
 }
 
 #[no_mangle]
@@ -70,5 +70,5 @@ pub extern "C" fn execute_debit_leg(amount_ptr: *const u8, amount_len: usize, ac
     let result = format!("Debiting {} from account {}", amount, account);
     log(&result);
 
-    string_to_ptr(&result)
+    string_to_ptr(&result) as *const u8
 }
