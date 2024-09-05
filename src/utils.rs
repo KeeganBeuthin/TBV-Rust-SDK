@@ -1,13 +1,16 @@
-use wasm_bindgen::prelude::*;
+use crate::ffi::log_message;
 
 pub fn log(message: &str) {
-    web_sys::console::log_1(&message.into());
+    let bytes = message.as_bytes();
+    unsafe {
+        log_message(bytes.as_ptr(), bytes.len() as i32);
+    }
 }
 
 pub fn read_html_code(html_code: &str) -> Result<String, String> {
     if html_code.is_empty() {
-        return Err("Error: empty HTML code provided".to_string());
+        Err("Error: empty HTML code provided".to_string())
+    } else {
+        Ok(html_code.to_string())
     }
-    // Here you can add any processing logic if needed
-    Ok(html_code.to_string())
 }
