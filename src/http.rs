@@ -1,6 +1,6 @@
 use serde_json::Value;
 
-pub fn sdk_handle_http_request(request: &Value) -> Result<String, String> {
+pub fn handle_http_request(request: &Value) -> Result<String, String> {
     // Log the incoming request for debugging
     log(&format!("SDK received request: {}", request));
 
