@@ -16,8 +16,11 @@ pub extern "C" fn dealloc(ptr: *mut u8, len: usize) {
     }
 }
 
-pub fn string_to_ptr(s: &str) -> *const c_char {
-    CString::new(s).unwrap().into_raw()
+pub fn string_to_ptr(s: &str) -> *const u8 {
+    let c_str = CString::new(s).unwrap();
+    let ptr = c_str.as_ptr();
+    std::mem::forget(c_str);
+    ptr as *const u8
 }
 
 pub fn free_string(ptr: *mut c_char) {

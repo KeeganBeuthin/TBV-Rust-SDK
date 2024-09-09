@@ -1,5 +1,6 @@
 use serde_json::Value;
-use crate::ffi::{alloc, dealloc, string_to_ptr};
+use serde::Serialize;
+use crate::ffi::string_to_ptr;
 use crate::utils::log;
 
 #[no_mangle]
@@ -11,7 +12,7 @@ pub extern "C" fn handle_http_request(request_ptr: *const u8, request_len: usize
         Ok(v) => v,
         Err(e) => {
             let error_msg = format!("{{\"error\": \"Invalid JSON: {}\"}}", e);
-            return string_to_ptr(&error_msg);
+            return string_to_ptr(&error_msg) as *const u8;
         }
     };
 
@@ -21,7 +22,7 @@ pub extern "C" fn handle_http_request(request_ptr: *const u8, request_len: usize
     };
 
     log(&format!("Sending response: {}", response));
-    string_to_ptr(&response)
+    string_to_ptr(&response) as *const u8
 }
 
 fn process_request(request: &Value) -> Result<String, String> {
@@ -39,6 +40,7 @@ fn process_request(request: &Value) -> Result<String, String> {
     Ok(serde_json::to_string(&response).map_err(|e| e.to_string())?)
 }
 
+#[derive(Serialize)]
 struct Response {
     status_code: u16,
     headers: Value,
